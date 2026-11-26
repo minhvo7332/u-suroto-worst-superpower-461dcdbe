@@ -10,7 +10,7 @@ import os
 
 LINE = "You can make yourself exactly one millimetre taller, once a year, on your birthday."
 
-# 87 chars, one line, second-person hook + concrete numbers (1 mm, once a year,
+# 83 chars, one line, second-person hook + concrete numbers (1 mm, once a year,
 # birthday). The uselessness is total: a millimetre a year changes nothing,
 # and the birthday ritual makes the reader picture the power in use.
 
@@ -26,6 +26,9 @@ def main() -> None:
         f.write(text)
     # Outputs are collected as another user: leave the file world-readable.
     os.chmod(path, 0o644)
+    # Verify-after-write: the file on disk must be exactly the line, byte for byte.
+    with open(path, encoding="utf-8", newline="") as f:
+        assert f.read() == text, "entry.txt differs from LINE after write"
 
 
 if __name__ == "__main__":
